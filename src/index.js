@@ -15,16 +15,17 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(session({ secret: 'token-muy-secreto', resave: true, saveUninitialized: true }));
 app.use(flash())
+app.use(express.static('public'))
 
 // routes
 app.use('/products', rutasProducts);
 app.use('/users', rutasUsers);
 
-/*
+
 app.get('/', (req, res) => {
   res.send("Bienvenido al Servidor")
 })
-*/
+
 
 app.listen(9000, function(){
   console.log("Servidor iniciado port 9000");
