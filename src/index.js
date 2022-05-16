@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const session = require('express-session')
 const flash = require('express-flash')
 
+const pool = require('./database')
 //Enrutadores
 const rutasUsers = require('./routes/users')
 const rutasProducts = require('./routes/products')
@@ -24,6 +25,23 @@ app.use('/users', rutasUsers);
 
 app.get('/', (req, res) => {
   res.send("Bienvenido al Servidor")
+})
+
+app.post('/procesar_inicio', async (req, res) => {
+  const { email, password } = req.body;
+  const consulta = `
+      SELECT *
+      FROM usuario
+      WHERE
+      email = $1 AND
+      password = $2
+    `
+  const response = await pool.query(consulta, [email, password]);
+  const usuario = response.rows[0]
+  console.log(usuario)
+  if(usuario){
+    req.session.usuario = usuario
+  }
 })
 
 
